@@ -1,0 +1,35 @@
+name: Build EXE
+
+on:
+  push:
+    branches: [ main ] # mainブランチにプッシュされたら作動
+  workflow_dispatch:   # 手動実行も許可
+
+jobs:
+  build:
+    runs-on: windows-latest # Windows環境でビルド
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.11' # 安定版のPython使用
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+
+    - name: Build with PyInstaller
+      # --noconsole コマンドプロンプト隠し --onefile 1exeにまとめ
+      run: |
+        pyinstaller --noconsole --onefile main.py
+
+    - name: Upload Artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: CapsLockLock-EXE
+        path: dist/main.exe # できたexeをダウンロード可能に
