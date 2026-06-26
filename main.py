@@ -6,8 +6,8 @@ from PIL import Image, ImageDraw
 # キー制御 (pynput)
 # Windows環境でCapslock入力を無かったことにする
 def win32_event_filter(msg, data):
-    # CapsLockの仮想キーコードが20
-    if data.vkCode == 20:
+    # CapsLockの仮想キーコードが20　＋英数キーの240も追加
+    if data.vkCode in (20, 240):
         listener.suppress_event() # 入力を消す
         return False # 他のアプリにキーイベントを渡さない
     return True
